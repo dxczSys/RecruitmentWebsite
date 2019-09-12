@@ -2,7 +2,7 @@ import axios from 'axios'
 
 
 // axios 配置   请求超时时间
-axios.defaults.timeout = 30000
+axios.defaults.timeout = 300000
 
 
 //这和webpack对应，webpack匹配api下的路径，替换成目标服务器target

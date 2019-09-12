@@ -307,7 +307,7 @@ export default {
   },
 
   mounted() {
-    this.getCompany()
+    // this.getCompany()
     this.addAnimation()
   },
 
@@ -358,11 +358,11 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid && !this.tipsShow) {
           let result = {
-            email: this.hrInfo.email,
-            password: this.hrInfo.password,
-            phone: this.hrInfo.phone,
-            username: this.hrInfo.username,
-            code: this.hrInfo.code,
+            uemail: this.hrInfo.email,
+            upasswd: this.hrInfo.password,
+            uphone: this.hrInfo.phone,
+            uname: this.hrInfo.username,
+            // code: this.hrInfo.code,
           }
           // hr注册
           if (this.isHr) {
@@ -388,30 +388,37 @@ export default {
         } else {
 
         // 用户注册
-        fetch
-          .userRegister(result)
-          .then(res => {
-            if (res.status == 200) {
-              if (res.data.code === 0) {
-                this.$message({
-                  message: "注册成功",
-                  type: "success"
-                });
-                this.$router.push({ name: "login" });
-                } else {
-                this.$message({
-                  message: res.data.msg,
-                  type: "warning"
-                  });
-                }
-               }
-            })
-            .catch(e => {
-              this.$message({
-                message: "注册失败",
-                type: "warning"
-              });
-            });
+        // fetch
+        //   .userRegister(result)
+        //   .then(res => {
+        //     if (res.status == 200) {
+        //       if (res.data.code === 0) {
+        //         this.$message({
+        //           message: "注册成功",
+        //           type: "success"
+        //         });
+        //         this.$router.push({ name: "login" });
+        //         } else {
+        //         this.$message({
+        //           message: res.data.msg,
+        //           type: "warning"
+        //           });
+        //         }
+        //        }
+        //     })
+        //     .catch(e => {
+        //       this.$message({
+        //         message: "注册失败",
+        //         type: "warning"
+        //       });
+        //     });
+          this.$http({
+            method : 'post',
+            url : '/userAdd',
+            data : result
+          }).then(res => {
+
+          })
         }
         }
       })
