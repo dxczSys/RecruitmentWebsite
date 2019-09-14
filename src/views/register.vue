@@ -60,7 +60,7 @@
           <el-input v-model="companyInfo.address" auto-complete="off" placeholder="地址"></el-input>
         </el-form-item>
         <el-form-item  :label-width="formLabelWidth">
-          <el-input v-model="companyInfo.avatar" auto-complete="off" placeholder="logo"></el-input>
+          <el-input v-model="companyInfo.avatar" auto-complete="off" placeholder="电话"></el-input>
         </el-form-item>
         <el-form-item :label-width="formLabelWidth">
           <el-input v-model="companyInfo.introduce" auto-complete="off" placeholder="简介"></el-input>
@@ -279,6 +279,7 @@ export default {
       tipsShow: false,
       companyInfo: {
         name: '',
+        address : '',
         avatar: '',
         introduce: '',
         scale: '',
@@ -307,7 +308,7 @@ export default {
   },
 
   mounted() {
-    // this.getCompany()
+    this.getCompany()
     this.addAnimation()
   },
 
@@ -366,10 +367,17 @@ export default {
           }
           // hr注册
           if (this.isHr) {
-            result.companyId = this.companyId;
-            fetch.hrRegister(result).then(res => {
+            let _ressult = {
+              cname: this.hrInfo.username,
+              cpasswd:this.hrInfo.password,
+              cphone:this.hrInfo.phone,
+              ccompanyname:this.companyId,
+              cemail:this.hrInfo.email
+            }
+            // result.companyId = this.companyId;
+            fetch.hrRegister(_ressult).then(res => {
             if (res.status == 200) {
-                if (res.data.code === 0) {
+                if (res.data.code) {
                   this.$message({
                     message: "注册成功",
                     type: "success"
@@ -388,37 +396,30 @@ export default {
         } else {
 
         // 用户注册
-        // fetch
-        //   .userRegister(result)
-        //   .then(res => {
-        //     if (res.status == 200) {
-        //       if (res.data.code === 0) {
-        //         this.$message({
-        //           message: "注册成功",
-        //           type: "success"
-        //         });
-        //         this.$router.push({ name: "login" });
-        //         } else {
-        //         this.$message({
-        //           message: res.data.msg,
-        //           type: "warning"
-        //           });
-        //         }
-        //        }
-        //     })
-        //     .catch(e => {
-        //       this.$message({
-        //         message: "注册失败",
-        //         type: "warning"
-        //       });
-        //     });
-          this.$http({
-            method : 'post',
-            url : '/userAdd',
-            data : result
-          }).then(res => {
-
-          })
+        fetch
+          .userRegister(result)
+          .then(res => {
+            if (res.status == 200) {
+              if (res.data.code) {
+                  this.$message({
+                    message: "注册成功",
+                    type: "success"
+                  });
+                  this.$router.push({ name: "login" });
+                } else {
+                  this.$message({
+                    message: res.data.msg,
+                    type: "warning"
+                    });
+                }
+               }
+            })
+            .catch(e => {
+              this.$message({
+                message: "注册失败",
+                type: "warning"
+              });
+            });
         }
         }
       })
@@ -426,11 +427,10 @@ export default {
 
     // 获取公司职位名称
     getCompany() {
-      fetch
-        .getCompany()
+      fetch.getCompany(this.hrInfo.company)
         .then(res => {
-          for (let item of res.data.data.companyList) {
-            this.options.push({value: item.name, label: item.id})
+          for (let item of res.data.msg) {
+            this.options.push({value: item.cname, label: item.cid})
           }
         })
         .catch(e => {
@@ -471,8 +471,17 @@ export default {
     },
     // 提交公司信息
     submitCompanyInfo() {
-      fetch.addCompany(this.companyInfo).then(res => {
-          if (res.data.code === 0) {
+      let _obj = {
+        cname : this.companyInfo.name,
+        caddress : this.companyInfo.address,
+        clogo : this.companyInfo.avatar,
+        cinfo : this.companyInfo.introduce,
+        cscale : this.companyInfo.scale,
+        ctype : this.companyInfo.type
+      } 
+
+      fetch.addCompany(_obj).then(res => {
+          if (res.data.code) {
               this.$message({
                 message: "添加成功",
                 type: "success"
@@ -482,10 +491,9 @@ export default {
                 this.$message({
                   message: res.data.msg,
                   type: "warning"
-                  });
+                });
             }
       })
-      console.log(this.companyInfo)
     },
     // 注册切换角色
     changeTabs(isHr) {

@@ -4,9 +4,9 @@
       <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1524746733938&di=9ae24b5205e97c2876b48d3ff26f1c23&imgtype=0&src=http%3A%2F%2Fwww.snlfjx.com%2Fforum%2FSkin%2Fimgs%2Fno-data.png" style="margin: 0 auto">
       <p>暂时没有发布的职位哦，快去发布吧</p>
     </div>
-    <el-card  v-for="(item, key) in joblist" :key="key" class="mycard" v-if="!show" @click="checkDetail(item.id)">
-      <p class="myflex">{{item.title}}</p>
-      <el-button class="delbtn" @click="deletejob(item.id)">删除职位</el-button>
+    <el-card  v-for="(item, key) in joblist" :key="key" class="mycard" vf="!show" @click.native="checkDetail(item.jid)">
+      <p class="myflex">{{item.jname}}</p>
+      <el-button class="delbtn" @click="deletejob(item.jid)">删除职位</el-button>
     </el-card>
   </div>
 </template>
@@ -36,7 +36,7 @@ export default {
     checkJob () {
       fetch.checkJob().then(res => {
         if (res.status === 200) {
-          this.joblist = res.data.data
+          this.joblist = res.data.msg
           if (this.joblist.length === 0) {
             this.show = true
           }
@@ -48,7 +48,8 @@ export default {
     deletejob (id) {
       fetch.deletejob(id).then(res => {
         if (res.status === 200) {
-          if (res.data.success === true) {
+          if (res.data.code) {
+            this.checkJob()
             this.count++
           }
         }

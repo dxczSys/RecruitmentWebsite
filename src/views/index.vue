@@ -10,13 +10,21 @@
 </div>
   </div>
   <div class="division"><h3>热门企业</h3>
-                        <h3 style="color: #888;font-weight: 400">--- Hot ---</h3></div>
+   <h3 style="color: #888;font-weight: 400">--- Hot ---</h3></div>
   <div class="cardContain">
-<div class="wrapper-card">
-  <div class="card" v-for="(item, key) in companyList" :key="key">
-    <img :src="item.avatar" class="image" @click="getCompanyDetail(item.id)">
-</div>
-</div>
+    <div class="wrapper-card">
+        <div class="card company-card" v-for="(item, key) in companyList" :key="key"  @click="getCompanyDetail(item.cname)">
+          <hr style="height:3px;border:none;border-top:3px double red;" />
+          <div style="margin-left: 35px;">公司名字：{{item.cname}}</div>
+          <div style="margin-left: 35px;">公司介绍：{{item.cinfo}}</div>
+          <div style="margin-left: 35px;">公司地址：{{item.caddress}}</div>
+          <div style="margin-left: 35px;">公司规模：{{item.cscale}}</div>
+          <div style="margin-left: 35px;">公司类型：{{item.ctype}}</div>
+          <div style="margin-left: 35px;">公司电话：{{item.clogo}}</div>
+          <hr style="height:3px;border:none;border-top:3px double red;" />
+          <!-- <img src="../../static/bg-reusme.png" class="image"> -->
+      </div>
+    </div>
   </div>
   <!--推荐-->
   <div class="division" v-if="isLogin">
@@ -113,8 +121,25 @@
 
   <!--热门职位-->
   <div class="division">
-    <h3>热门职位</h3>
+    <h3>招聘人才</h3>
     <h3 style="color: #888;font-weight: 400">--- JOBS ---</h3>
+
+    <div class="cardContain">
+      <div class="wrapper-card">
+          <div id="diva" class="card company-card userinfo" v-for="(item, key) in JobLists" :key="key">
+            <div style="text-align: center;">{{item.unameone}} 的简历</div>
+            <hr style="height:10px;border:none;border-top:10px groove skyblue;" />
+            <div style="margin-left: 35px;">性别：{{item.usex}}</div>
+            <div style="margin-left: 35px;">学历：{{item.uxueli}}</div>
+            <div style="margin-left: 35px;">毕业学校：{{item.uschool}}</div>
+            <div style="margin-left: 35px;">毕业日期：{{item.ugraduationdate}}</div>
+            <div style="margin-left: 35px;"><span><i class="el-icon-news"></i>聊天</span></div>
+            
+            <!-- <img src="../../static/bg-reusme.png" class="image"> -->
+        </div>
+      </div>
+    </div>
+
   </div>
   <div class="newsContain">
     <div class="temp">
@@ -140,12 +165,9 @@
     <p>即刻起，点赞你的生活，从这一份工作开始。</p>
     </div>
   </div>
-  <div class="division"><h3>联系我们</h3>
-    <h3 style="color: #888;font-weight: 400">--- CONTACT ---</h3></div>
-  <div class="footer">
-    <a href="https://github.com/Clairezyw"><img src="../assets/github4.png"><span>https://github.com/Clairezyw</span></a>
-    <a href="https://github.com/stalary"><img src="../assets/github4.png"><span>https://github.com/stalary</span></a>
-  </div>
+  <!-- <div class="division"><h3>联系我们</h3>
+    <h3 style="color: #888;font-weight: 400">--- CONTACT ---</h3></div> -->
+  
 </div>
 </template>
 <style>
@@ -154,7 +176,14 @@
 body {
   background: #ededed;
 }
-
+.company-card{
+  background-image: url('../../static/bg-reusme.png');
+  background-size: 100% 100%;
+  padding: 16px;
+}
+.company-card div{
+  line-height: 30px;
+}
 .myMenu {
   position: sticky;
   top: 0;
@@ -170,7 +199,7 @@ body {
 
 .cardContain {
   width: 100%;
-  height: 100%;
+  height: 364px;
   background: #fff;
 }
 
@@ -282,6 +311,7 @@ body {
   height:1000px;
   margin: 30px auto auto auto;
   padding-top: 30px;
+  text-align: left;
 }
 
 .wrapper-card .card {
@@ -411,6 +441,9 @@ export default {
       currentDate: '完美',
       company: '',
       companyList: [],
+      companyListTotal : [],
+      JobListTotal :[],
+      JobLists :[],
       jobList: [],
       recommandList: [],
       isHr: localStorage.getItem('role') === '1',
@@ -442,6 +475,7 @@ export default {
   mounted () {
     window.addEventListener('scroll', this.handler)
     this.getCompany()
+    this.getJobinfo()
     this.getJob()
     this.getRecommand()
   },
@@ -483,16 +517,43 @@ export default {
     },
 
     getCompany () {
-      fetch.getCompany().then(res => {
+      let self = this
+      fetch.getCompany1().then(res => {
         if (res.status === 200) {
-          this.companyList = res.data.data.companyList
-          console.log('res', res)
+            this.companyListTotal = res.data.msg
+            this.companyList = this.companyListTotal.slice(0, 3)
+            const timer = setInterval(_ => {
+              self.companyList = self.companyListTotal.slice(0, 3)
+              self.companyListTotal.splice(0, 3)
+              self.companyListTotal.push(...self.companyList)
+            }, 3000)
+            this.$once('hook:beforeDestroy', _ => {
+              clearInterval(timer)
+            })
         }
       })
     },
 
+    getJobinfo () {
+      let self = this
+      fetch.getJobinfo1().then(res => {
+        if (res.status === 200) {
+            this.JobListTotal = res.data.msg
+            this.JobLists = this.JobListTotal.slice(0, 3)
+            const timer = setInterval(_ => {
+              self.JobLists = self.JobListTotal.slice(0, 3)
+              self.JobListTotal.splice(0, 3)
+              self.JobListTotal.push(...self.JobLists)
+            }, 3000)
+            this.$once('hook:beforeDestroy', _ => {
+              clearInterval(timer)
+            })
+        }
+      })
+    },
+   
     getCompanyDetail (id) {
-      localStorage.setItem('companyId', id)
+      localStorage.setItem('companyName', id)
       this.$router.push({name: 'companyDetail'})
     },
     // 获取推荐列表

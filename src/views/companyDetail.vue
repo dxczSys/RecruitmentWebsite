@@ -1,23 +1,24 @@
 <template>
  <div>
-<el-card class="companycard" style="height: 180px">
-  <img :src="detail.avatar" class="avatar">
-  <div class="introduce">
-  <p class="title">{{detail.name}}</p>
-  <p>{{detail.introduce}}</p>
-  <p>{{detail.address}}<span>|</span>{{detail.scale}}<span>|</span>{{detail.type}}</p>
-  </div>
-</el-card>
-<el-card class="companycard">
-  <div class="job">招聘信息</div>
-  <p v-if="!isShow" class="nojob">暂时没有招聘信息哦</p>
-    <div v-if="isShow"  v-for="(item, key) in recruit" :key="key">
-      <div class="jobinfo" @click="getJobDetail(item.id)">
-      <p class="jobname">{{item.title}}</p>
-      <p><i class="el-icon-location"></i>{{detail.address}}<span>|</span>{{detail.scale}}<span>|</span>{{detail.type}}</p>
-      </div>
-  </div>
-</el-card>
+      <el-card class="companycard" style="height: 180px">
+        <img src="../../static/title.png" class="avatar">
+        <div class="introduce">
+          <p class="title">{{detail.cname}}</p>
+          <p>{{detail.cinfo}}</p>
+          <p>{{detail.caddress}}<span>|</span>{{detail.cscale}}<span>|</span>{{detail.ctype}}</p>
+        </div>
+      </el-card>
+
+      <el-card class="companycard">
+        <div class="job">招聘信息</div>
+        <p v-if="!isShow" class="nojob">暂时没有招聘信息哦</p>
+          <div v-if="isShow"  v-for="(item, key) in recruit" :key="key">
+            <div class="jobinfo">
+              <p class="jobname">{{item.jname}}</p>
+              <p><i class="el-icon-location"></i>{{item.jobinfo}}<span>|</span>{{detail.caddress}}<span>|</span>{{detail.cscale}}<span>|</span><span><i class="el-icon-news"></i>聊天</span></p>
+            </div>
+        </div>
+      </el-card>
   </div>
 </template>
 <style>
@@ -88,8 +89,8 @@ import fetch from '../api/fetch'
 export default {
   data () {
     return {
-      companyId: localStorage.getItem('companyId'),
-      detail: [],
+      companyId: localStorage.getItem('companyName'),
+      detail: {},
       recruit: [],
       isShow: true
     }
@@ -99,13 +100,12 @@ export default {
   },
   methods: {
     getCompanyInfo () {
-      fetch
-        .getCompanyDetail(this.companyId)
+      fetch.getCompanyDetail(this.companyId)
         .then(res => {
           if (res.status === 200) {
-            if (res.data.success === true) {
-              this.detail = res.data.data.company
-              this.recruit = res.data.data.recruitList
+            if (res.data.code) {
+              this.detail = res.data.msg.obj
+              this.recruit = res.data.msg.obj1
               if (this.recruit.length === 0) {
                 this.isShow = false
               }

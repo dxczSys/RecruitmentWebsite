@@ -1,22 +1,31 @@
-const host = 'http://pf.stalary.com'
-// const host = 'http://localhost:10000'
+// const host = 'http://pf.stalary.com'
+const host = ''
 
 export default {
-  getCompany () {
-    return host + '/company'
+  getCompany (name) {
+    return '/companySelByName?name=' + name
+  },
+  getCompany1 () {
+    return '/companySel'
+  },
+  getJobinfo1 () {
+    return '/UserinfoSel'
+  },
+  addComp () {
+    return '/companyAdd'
   },
   userRegister () {
-    return host + '/user'
+    return host + '/userAdd'
   },
   // 获取全部公司信息
   getComName () {
     return host + '/company/noPage'
   },
   userLogin () {
-    return host + '/user/login'
+    return '/userLogin'
   },
   getUserInfo () {
-    return host + '/user'
+    return '/UserinfoSelByUid'
   },
   sendCode () {
     return host + '/outside/code'
@@ -26,7 +35,7 @@ export default {
   },
   // 提交简历信息
   sendResume () {
-    return host + '/resume'
+    return '/ResumeAdd'
   },
   // 获取投递列表
   deliveryList () {
@@ -34,7 +43,7 @@ export default {
   },
   // 提交用户信息
   putUserInfo () {
-    return host + '/user/info'
+    return '/UserinfoAdd'
   },
   // 修改用户手机号码
   changePhone () {
@@ -50,15 +59,15 @@ export default {
   },
   // 获取公司详情
   getCompanyDetail (id) {
-    return host + `/company/${id}`
+    return '/companySelByName1?name=' + id
   },
   // 获取简历信息
   getResume () {
-    return host + '/resume'
+    return '/ResumeSelByUid'
   },
   // 获取岗位详细信息
   getJobDetail (id) {
-    return host + `/recruit/${id}`
+    return host + '/JobSelById?id=' + id
   },
   // 投递简历
   deliveryReusme () {
@@ -82,17 +91,17 @@ export default {
   },
   // hr发布职位信息
   publishJob () {
-    return host + '/recruit'
+    return '/JobAdd'
   },
   // 查看hr发布的职位信息
   checkJob () {
-    return host + '/recruit/hr'
+    return '/JobSelByUid'
   },
-  deletejob () {
-    return host + '/recruit'
+  deletejob (id) {
+    return '/JobDel?id=' + id
   },
   hrRegister () {
-    return host + '/user/hr'
+    return '/customerAdd'
   },
   // 推荐候选人
   recommendCandidate () {

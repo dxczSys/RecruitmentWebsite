@@ -43,7 +43,7 @@
             <td>毕业时间：</td>
             <td>{{this.tableList.endTime}}</td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td>技术栈：</td>
             <td>
           <tr v-for="(item, key) in this.tableList.skills" :key="key">
@@ -53,7 +53,7 @@
             </td>
           </tr>
           </td>
-          </tr>
+          </tr> -->
           <tr>
             <td>实习（工作）经历：</td>
             <td>{{this.tableList.experience}}</td>
@@ -101,7 +101,7 @@
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="resumeList.email"></el-input>
         </el-form-item>
-        <el-form-item label="技术栈" prop="skills">
+        <!-- <el-form-item label="技术栈" prop="skills">
           <el-button @click="addSkill()" class="addbtn">添加</el-button>
           <div class="skillContain">
             <div v-for="(item, key) in resumeList.skills" :key="key">
@@ -115,7 +115,7 @@
               <i class="el-icon-error deleteIt" @click="deleteItem(key)"></i>
             </div>
           </div>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="工作(实习)经历" prop="experience">
           <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 6}" v-model="resumeList.experience "></el-input>
         </el-form-item>
@@ -150,14 +150,15 @@
           <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 6}" v-model="resumeList.introduce"></el-input>
         </el-form-item>
         <el-form-item label="毕业年份" prop="endTime">
-          <el-select v-model="resumeList.endTime" style="width: 100%">
+          <!-- <el-select v-model="resumeList.endTime" style="width: 100%">
             <el-option
               v-for="item in options"
               :key="item.value"
               :label="item.label"
               :value="item.value">
             </el-option>
-          </el-select>
+          </el-select> -->
+          <el-input v-model="resumeList.endTime"></el-input>
         </el-form-item>
         <el-form-item label="学校" prop="school">
           <el-input v-model="resumeList.school"></el-input>
@@ -168,7 +169,7 @@
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="resumeList.email"></el-input>
         </el-form-item>
-        <el-form-item label="技术栈" prop="skills">
+        <!-- <el-form-item label="技术栈" prop="skills">
           <el-button @click="addSkill()" class="addbtn">添加</el-button>
           <div class="skillContain">
             <div v-for="(item, key) in resumeList.skills" :key="key">
@@ -182,7 +183,7 @@
               <i class="el-icon-error deleteIt" @click="deleteItem(key)"></i>
             </div>
           </div>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="工作(实习)经历" prop="experience">
           <el-input type="textarea" :autosize="{ minRows: 4, maxRows: 6}" v-model="resumeList.experience "></el-input>
         </el-form-item>
@@ -451,9 +452,23 @@ export default {
     changeResume (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          fetch.sendResume(this.resumeList).then(res => {
+
+          let _params = {
+            rname : this.resumeList.name,
+            rsex : this.resumeList.sex,
+            rage : this.resumeList.age,
+            raddress : this.resumeList.address,
+            rinfo : this.resumeList.introduce,
+            rgraduation : this.resumeList.endTime,
+            rschool : this.resumeList.school,
+            rphone : this.resumeList.phone,
+            remail : this.resumeList.email,
+            rwork : this.resumeList.experience,
+            rprizewinning : this.resumeList.awards
+          }
+          fetch.sendResume(_params).then(res => {
             if (res.status === 200) {
-              if (res.data.success) {
+              if (res.data.code) {
                 this.$message({
                   message: '保存成功',
                   type: 'success'
@@ -470,17 +485,42 @@ export default {
         }
       })
     },
-    getResume (userId) {
-      fetch
-        .getResume(userId)
+    getResume () {
+      fetch.getResume()
         .then(res => {
           if (res.status === 200) {
-            if (res.data.success === true) {
-              if (res.data.data !== null) {
+            if (res.data.code) {
+              if (res.data.msg !== null) {
                 this.haveResume = true
-                this.resumeList = res.data.data
-                this.tableList = res.data.data
-                this.len = res.data.data.skills.length
+
+                this.resumeList.name = res.data.msg.rname
+              this.resumeList.sex = res.data.msg.rsex
+              this.resumeList.age = res.data.msg.rage
+             
+              this.resumeList.address = res.data.msg.raddress
+              this.resumeList.introduce = res.data.msg.rinfo
+              this.resumeList.endTime = res.data.msg.rgraduation
+              this.resumeList.school = res.data.msg.rschool
+              this.resumeList.phone = res.data.msg.rphone
+              this.resumeList.email = res.data.msg.remail
+              this.resumeList.experience = res.data.msg.rwork
+              this.resumeList.awards = res.data.msg.rprizewinning
+
+
+              this.tableList.name = res.data.msg.rname
+              this.tableList.sex = res.data.msg.rsex
+              this.tableList.age = res.data.msg.rage
+             
+              this.tableList.address = res.data.msg.raddress
+              this.tableList.introduce = res.data.msg.rinfo
+              this.tableList.endTime = res.data.msg.rgraduation
+              this.tableList.school = res.data.msg.rschool
+              this.tableList.phone = res.data.msg.rphone
+              this.tableList.email = res.data.msg.remail
+              this.tableList.experience = res.data.msg.rwork
+              this.tableList.awards = res.data.msg.rprizewinning
+
+                // this.len = res.data.data.skills.length
               } else {
                 this.haveResume = false
               }

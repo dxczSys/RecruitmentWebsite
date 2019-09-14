@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="wrapper">
-      <el-card class="box-card">
+      <!-- <el-card class="box-card">
         <div>
           <el-upload
             class="avatar-uploader"
@@ -16,7 +16,7 @@
           </el-upload>
           <span class="username">{{list ? list.nickname : ''}}</span>
         </div>
-      </el-card>
+      </el-card> -->
       <el-tabs type="border-card" tabPosition="left" style="width:1000px;height: 100vh;margin: 14px auto auto auto;position: sticky">
         <el-tab-pane>
           <span slot="label">个人信息<i class="el-icon-arrow-right"></i></span>
@@ -26,14 +26,14 @@
           <span slot="label">我的简历<i class="el-icon-arrow-right"></i></span>
           <my-resume></my-resume>
         </el-tab-pane>
-        <el-tab-pane>
+        <!-- <el-tab-pane>
           <span slot="label">投递记录<i class="el-icon-arrow-right"></i></span>
           <delivery></delivery>
         </el-tab-pane>
         <el-tab-pane>
           <span slot="label">设置<i class="el-icon-arrow-right"></i></span>
           <setting></setting>
-        </el-tab-pane>
+        </el-tab-pane> -->
       </el-tabs>
     </div>
   </div>
@@ -141,7 +141,17 @@
         fetch
           .getUserInfo()
           .then(res => {
-            this.list = res.data.data !== null ? res.data.data : this.list
+            // this.list = res.data.data !== null ? res.data.data : this.list
+            this.list.nickname = res.data.msg.uname
+            this.list.name = res.data.msg.unameone
+            this.list.sex = res.data.msg.usex
+            this.list.address = res.data.msg.uaddress
+            this.list.introduce = res.data.msg.ujieli
+            this.list.endTime = res.data.msg.ugraduationdate
+            this.list.education = res.data.msg.uxueli
+            this.list.school = res.data.msg.uschool
+            // this.list.intentionCompany = res.data.msg.ucompany
+            // this.list.intentionJob = res.data.msg.ulovework
           })
           .catch(err => {
             console.log(err)

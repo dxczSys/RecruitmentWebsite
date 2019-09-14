@@ -9,10 +9,10 @@
     <span slot="label">投递记录<i class="el-icon-arrow-right"></i></span>
    <receive></receive>
   </el-tab-pane>
-   <el-tab-pane >
+   <!-- <el-tab-pane >
     <span slot="label">设置<i class="el-icon-arrow-right"></i></span>
    <setting></setting>
-  </el-tab-pane>
+  </el-tab-pane> -->
 </el-tabs>
   </div>
 </template>

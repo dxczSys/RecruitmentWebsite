@@ -148,21 +148,25 @@
       submitForm (formName) {
         this.$refs[formName].validate(valid => {
           if (valid) {
-            fetch
-              .userLogin(this.loginInfo)
+            let _params = {
+              uname:this.loginInfo.username,
+              upasswd:this.loginInfo.password
+            }
+            fetch.userLogin(_params)
               .then(res => {
                 if (res.status === 200) {
-                  if (res.data.success === true) {
-                    localStorage.setItem('token', res.data.data.token)
-                    localStorage.setItem('companyId', res.data.data.companyId)
-                    localStorage.setItem('role', res.data.data.role)
-                    sessionStorage.setItem('userId', res.data.data.userId)
-                    if (res.data.data.role === 2) {
-                      this.$router.push({name: 'userInfo', params: {refresh: 1}})
-                    } else {
-                      this.$router.push({name: 'hrView', params: {hrRefresh: 2}})
-                    }
-                  } else {
+                  debugger
+                  //返回code--->1用户   2--->公司
+                  if (res.data.code == 1) {
+                    //localStorage.setItem('token', res.data.data.token);
+                    localStorage.setItem('role', '2')
+                    localStorage.setItem('userId', res.data.msg.uname)
+                    this.$router.push({name: 'userInfo', params: {refresh: 1}})
+                  } else if(res.data.code == 2){
+                    localStorage.setItem('role', '1')
+                    localStorage.setItem('companyId', res.data.msg.cname)
+                    this.$router.push({name: 'hrView', params: {hrRefresh: 2}})
+                  }else{
                     this.$message({
                       message: '用户名或密码错误',
                       type: 'warning'

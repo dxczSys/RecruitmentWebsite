@@ -7,7 +7,13 @@ let headers = {
 }
 export default {
   getCompany () {
-    return axios.get(api.getCompany(), {params: {size: 9}}, {headers: headers})
+    return axios.get(api.getCompany(name), {params: {size: 9}}, {headers: headers})
+  },
+  getCompany1 () {
+    return axios.get(api.getCompany1(), {headers: headers})
+  },
+  getJobinfo1 () {
+    return axios.get(api.getJobinfo1(), {headers: headers})
   },
   userRegister (info) {
     return axios.post(api.userRegister(), JSON.stringify(info), {headers: headers})
@@ -34,7 +40,7 @@ export default {
     return axios.get(api.deliveryList(), {headers: headers})
   },
   putUserInfo (userInfo) {
-    return axios.put(api.putUserInfo(), JSON.stringify(userInfo), {headers: headers})
+    return axios.post(api.putUserInfo(), JSON.stringify(userInfo), {headers: headers})
   },
   changePhone (phone) {
     return axios.put(api.changePhone(), JSON.stringify(phone), {headers: headers})
@@ -76,7 +82,7 @@ export default {
     return axios.get(api.checkJob(), {headers: headers})
   },
   deletejob (id) {
-    return axios.delete(api.deletejob(), {params: {id: id}}, {headers: headers})
+    return axios.get(api.deletejob(id), {params: {id: id}}, {headers: headers})
   },
   hrRegister (hrInfo) {
     return axios.post(api.hrRegister(), JSON.stringify(hrInfo), {headers: headers})
@@ -92,6 +98,6 @@ export default {
   },
   // 添加公司
   addCompany (companyInfo) {
-    return axios.post(api.getCompany(), JSON.stringify(companyInfo), {headers: headers})
+    return axios.post(api.addComp(), JSON.stringify(companyInfo), {headers: headers})
   }
 }

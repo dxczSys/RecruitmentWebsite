@@ -34,14 +34,14 @@
         <td>学校：</td>
         <td>{{list.school}}</td>
       </tr>
-      <tr>
+      <!-- <tr>
         <td>我想去的公司：</td>
         <td>{{list.intentionCompany}}</td>
       </tr>
       <tr>
         <td> 我感兴趣的工作：</td>
         <td>{{list.intentionJob}}</td>
-      </tr>
+      </tr> -->
       <el-button class="edit" @click="changeEdit">编辑</el-button>
     </table>
     <el-form  :model="list" status-icon :rules="rules2" ref="list" label-width="100px" class="formWrap"
@@ -65,14 +65,15 @@
         <el-input v-model="list.introduce"></el-input>
       </el-form-item>
       <el-form-item label="毕业年份" prop="endTime">
-        <el-select v-model="list.endTime" style="width: 100%">
+        <!-- <el-select v-model="list.endTime" style="width: 100%">
           <el-option
             v-for="item in options"
             :key="item.value"
             :label="item.label"
             :value="item.value">
           </el-option>
-        </el-select>
+        </el-select> -->
+        <el-input v-model="list.endTime"></el-input>
       </el-form-item>
       <el-form-item label="学历" prop="education">
         <el-input v-model="list.education"></el-input>
@@ -80,7 +81,7 @@
       <el-form-item label="学校" prop="school">
         <el-input v-model="list.school"></el-input>
       </el-form-item>
-      <el-form-item label="我想去的公司" prop="intentionCompany">
+      <!-- <el-form-item label="我想去的公司" prop="intentionCompany">
         <el-select v-model="intentionCompany" multiple placeholder="请选择" style="width: 100%">
           <el-option
             v-for="item in companyOptions"
@@ -99,7 +100,7 @@
             :value="item.value">
         </el-option>
        </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button class='editor' @click="changeEdit">返回</el-button>
         <el-button  @click="submitInfo('list')">提交</el-button>
@@ -254,8 +255,8 @@
     watch: {
       list(val, oldVal) {
         if (val !== oldVal) {
-           this.intentionCompany = this.list.intentionCompany.split(',') || ''
-           this.intentionJob = this.list.intentionJob.split(',') || ''
+          //  this.intentionCompany = this.list.intentionCompany.split(',') || ''
+          //  this.intentionJob = this.list.intentionJob.split(',') || ''
         }
       }
     },
@@ -263,17 +264,28 @@
       changeEdit () {
         this.isEdit = !this.isEdit
       },
-      // 提交订单信息
+      // 提交订单信息      
       submitInfo (formName) {
+
+        let _results = {
+          uname : this.list.nickname,
+          unameone : this.list.name,
+          usex : this.list.sex,
+          uaddress : this.list.address,
+          ujieli : this.list.introduce,
+          ugraduationdate : this.list.endTime,
+          uxueli : this.list.education,
+          uschool : this.list.school
+         
+       };
+
         this.$refs[formName].validate(valid => {
           if (valid) {
             this.list.intentionCompany = this.intentionCompany.toString();
             this.list.intentionJob = this.intentionJob.toString();
-            fetch
-              .putUserInfo(this.list)
+            fetch.putUserInfo(_results)
               .then(res => {
-                console.log('list', this.list)
-                if (res.data.success) {
+                if (res.data.code) {
                   this.$message({
                     message: '保存成功',
                     type: 'success'

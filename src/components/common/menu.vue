@@ -7,8 +7,8 @@
         <span v-if="isHr && !isShow" @click="redirect(6)" class="tab">个人中心</span>
         <span @click="redirect(2)" class="tab" v-if="!isHr && !isShow">个人中心</span>
         <span class="tab" v-if="!isHr"><el-input placeholder="搜索心仪的职位" style="width:18rem" v-model="content"
-                                                 @change="getJob(content)"><i slot="prefix"
-                                                                              class="el-input__icon el-icon-search"></i></el-input></span>
+            @change="getJob(content)"><i slot="prefix"
+            class="el-input__icon el-icon-search"></i></el-input></span>
       </div>
       <div>
         <span @click="redirect(3)" class="tab" v-show="!isShow">
@@ -27,7 +27,7 @@
             <el-form-item label="职位介绍" prop="content" class="jobinput">
               <el-input type="textarea" rows="10" class="require" v-model="publishInfo.content"></el-input>
             </el-form-item>
-            <el-form-item label="技术栈" prop="skillList">
+            <!-- <el-form-item label="技术栈" prop="skillList">
               <el-button @click="addskill()" class="addbtn">添加</el-button>
               <div v-for="(item, key) in publishInfo.skillList" :key="key">
                 <input placeholder="技术" class="requireinput" v-model="item.name"/>
@@ -39,7 +39,7 @@
                 </select>
                 <i class="el-icon-error delete" @click="deleteItem(key)"></i>
               </div>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item>
               <el-button @click="addjob('publishInfo')">确定</el-button>
             </el-form-item>
@@ -198,7 +198,7 @@ export default {
     }
   },
   mounted () {
-    if (sessionStorage.getItem('userId')) {
+    if (localStorage.getItem('userId') || localStorage.getItem('companyId')) {
       this.isShow = false
     }
     if (localStorage.getItem('role') === '1') {
@@ -253,33 +253,47 @@ export default {
       this.$router.push({name: 'search', params: {count: 1}})
     },
     logout () {
-      fetch
-        .logout()
-        .then(res => {
-          if (res.status === 200) {
-            this.$message({
-              message: res.data.msg,
-              type: 'success'
-            })
-            sessionStorage.removeItem('userId')
+      // fetch.logout()
+      //   .then(res => {
+      //     if (res.status === 200) {
+      //       this.$message({
+      //         message: res.data.msg,
+      //         type: 'success'
+      //       })
+      //       sessionStorage.removeItem('userId')
+      //       localStorage.removeItem('role')
+      //       localStorage.removeItem('token')
+      //       localStorage.removeItem('count')
+      //       this.websocket.close()
+      //       this.$router.push({name: 'login'})
+      //     }
+      //   })
+      //   .catch(e => {
+      //     console.log(e)
+      //   })
+
+          sessionStorage.removeItem('userId')
             localStorage.removeItem('role')
-            localStorage.removeItem('token')
-            localStorage.removeItem('count')
-            this.websocket.close()
+            localStorage.removeItem('companyId')
+            // localStorage.removeItem('count')
+            // this.websocket.close()
             this.$router.push({name: 'login'})
-          }
-        })
-        .catch(e => {
-          console.log(e)
-        })
     },
     addjob (formName) {
       this.publishvisible = false
       this.publishInfo.hrId = sessionStorage.getItem('userId')
       this.publishInfo.companyId = localStorage.getItem('companyId')
+
+      debugger
+      let _job = {
+        jname : this.publishInfo.title,
+        jobinfo : this.publishInfo.content,
+        jskillList : this.publishInfo.skillList
+      }
+
       this.$refs[formName].validate(valid => {
         if (valid) {
-          fetch.publishJob(this.publishInfo).then(res => {
+          fetch.publishJob(_job).then(res => {
             if (res.status === 200) {
               this.amount++
               this.$refs[formName].resetFields()

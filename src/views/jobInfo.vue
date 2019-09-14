@@ -5,26 +5,28 @@
      <p>啊哦，职位已经下线了</p>
    </el-card>
    <div v-if="!isShow">
-  <el-card class="jobcard" style="height: 200px;">
-  <img :src="company.avatar" class="avatar">
-  <div class="introduce">
-  <p class="title">{{recruit.title}}</p>
-  <p>{{company.introduce}}</p>
-  <p>{{company.address}}<span>|</span>{{company.scale}}<span>|</span>{{company.type}}</p>
-  </div>
-  <el-button class="jobbtn" @click="sendResume()" v-if="!isHr && isLogin">投递简历</el-button>
-</el-card>
-<el-card class="jobcard">
-  <div class="jobintroduce">职位介绍</div>
-  <div class="jobcontent">
-  <p>{{recruit.content}}</p>
-  </div>
-  <div class="jobintroduce">联系hr</div>
-  <div class="hrinfo">
-    <span><i class="el-icon-news"></i>{{hr.username}}</span>
-    <a :href= "`mailto:${hr.email}`"><span><i class="el-icon-message"></i>{{hr.email}}</span></a>
-  </div>
-</el-card>
+     
+      <el-card class="jobcard" style="height: 200px;">
+        <img src="../../static/title.png" class="avatar">
+        <div class="introduce">
+          <p class="title">{{title}}</p>
+          <p>{{company.cinfo}}</p>
+          <p>{{company.caddress}}<span>|</span>{{company.cscale}}<span>|</span>{{company.ctype}}</p>
+        </div>
+        <el-button class="jobbtn" @click="sendResume()" v-if="!isHr && isLogin">投递简历</el-button>
+      </el-card>
+
+      <el-card class="jobcard">
+        <div class="jobintroduce">职位介绍</div>
+        <div class="jobcontent">
+          <pre>{{recruit.jobinfo}}</pre>
+        </div>
+        <div class="jobintroduce">联系hr</div>
+        <div class="hrinfo">
+          <span><i class="el-icon-news"></i>{{hr.cname}}</span>
+          <a :href= "`mailto:${hr.email}`"><span><i class="el-icon-message"></i>{{hr.cemail}}</span></a>
+        </div>
+      </el-card>
    </div>
 </div>
 </template>
@@ -89,9 +91,9 @@ import fetch from '../api/fetch'
 export default {
   data () {
     return {
-      company: [],
-      hr: [],
-      recruit: [],
+      company: {},
+      hr: {},
+      recruit: {},
       recruitId: 0,
       title: '',
       isShow: false,
@@ -114,19 +116,18 @@ export default {
   methods: {
     getJobDetail () {
       let jobId = localStorage.getItem('jobId')
-      fetch
-        .getJobDetail(jobId)
+      fetch.getJobDetail(jobId)
         .then(res => {
           if (res.status === 200) {
-            if (res.data.data === null) {
+            if (res.data.msg === null) {
               this.isShow = true
             }
-            if (res.data.success === true) {
-              this.company = res.data.data.company
-              this.hr = res.data.data.hr
-              this.recruit = res.data.data.recruit
-              this.recruitId = this.recruit.id
-              this.title = this.recruit.title
+            if (res.data.code) {
+              this.company = res.data.msg.company
+              this.hr = res.data.msg.customer
+              this.recruit = res.data.msg.job
+              this.recruitId = this.recruit.jid
+              this.title = this.recruit.jname
             }
           }
         })
