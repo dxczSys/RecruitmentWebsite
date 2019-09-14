@@ -427,8 +427,9 @@ export default {
 
     // 获取公司职位名称
     getCompany() {
-      fetch.getCompany(this.hrInfo.company)
+      fetch.getCompany1()
         .then(res => {
+          console.log(res)
           for (let item of res.data.msg) {
             this.options.push({value: item.cname, label: item.cid})
           }
@@ -457,6 +458,7 @@ export default {
     },
 
     createFilter(queryString) {
+      let option = this.options
         return (option) => {
           return (option.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
         };

@@ -126,7 +126,7 @@
 
     <div class="cardContain">
       <div class="wrapper-card">
-          <div id="diva" class="card company-card userinfo" v-for="(item, key) in JobLists" :key="key">
+          <div id="diva" class="card company-card userinfo" v-for="(item, key) in JobLists" :key="key" @click="openChat">
             <div style="text-align: center;">{{item.unameone}} 的简历</div>
             <hr style="height:10px;border:none;border-top:10px groove skyblue;" />
             <div style="margin-left: 35px;">性别：{{item.usex}}</div>
@@ -480,6 +480,11 @@ export default {
     this.getRecommand()
   },
   methods: {
+    openChat() {
+      this.$router.push({
+        name : 'chat'
+      })
+    },
     handler() {
       let info = document.getElementById('aboutusInfo') || null
       let card = document.getElementsByClassName('temp')[0] || null

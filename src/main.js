@@ -6,7 +6,7 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import axios from './http'
-import messageUI from './components/message';
+// import messageUI from './components/message';
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false

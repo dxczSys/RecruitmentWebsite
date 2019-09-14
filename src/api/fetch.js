@@ -7,7 +7,7 @@ let headers = {
 }
 export default {
   getCompany () {
-    return axios.get(api.getCompany(name), {params: {size: 9}}, {headers: headers})
+    return axios.get(api.getCompany(name), {headers: headers})
   },
   getCompany1 () {
     return axios.get(api.getCompany1(), {headers: headers})

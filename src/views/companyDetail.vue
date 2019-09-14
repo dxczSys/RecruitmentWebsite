@@ -15,7 +15,7 @@
           <div v-if="isShow"  v-for="(item, key) in recruit" :key="key">
             <div class="jobinfo">
               <p class="jobname">{{item.jname}}</p>
-              <p><i class="el-icon-location"></i>{{item.jobinfo}}<span>|</span>{{detail.caddress}}<span>|</span>{{detail.cscale}}<span>|</span><span><i class="el-icon-news"></i>聊天</span></p>
+              <p><i class="el-icon-location"></i>{{item.jobinfo}}<span>|</span>{{detail.caddress}}<span>|</span>{{detail.cscale}}<span>|</span><span @click="openChat"><i class="el-icon-news"></i>聊天</span></p>
             </div>
         </div>
       </el-card>
@@ -99,6 +99,11 @@ export default {
     this.getCompanyInfo()
   },
   methods: {
+    openChat() {
+      this.$router.push({
+        name : 'chat'
+      })
+    },
     getCompanyInfo () {
       fetch.getCompanyDetail(this.companyId)
         .then(res => {

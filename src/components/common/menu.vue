@@ -6,15 +6,15 @@
         <span v-if="isHr" @click="changeStatus" class="tab">发布职位</span>
         <span v-if="isHr && !isShow" @click="redirect(6)" class="tab">个人中心</span>
         <span @click="redirect(2)" class="tab" v-if="!isHr && !isShow">个人中心</span>
-        <span class="tab" v-if="!isHr"><el-input placeholder="搜索心仪的职位" style="width:18rem" v-model="content"
+        <!-- <span class="tab" v-if="!isHr"><el-input placeholder="搜索心仪的职位" style="width:18rem" v-model="content"
             @change="getJob(content)"><i slot="prefix"
-            class="el-input__icon el-icon-search"></i></el-input></span>
+            class="el-input__icon el-icon-search"></i></el-input></span> -->
       </div>
       <div>
-        <span @click="redirect(3)" class="tab" v-show="!isShow">
+        <!-- <span @click="redirect(3)" class="tab" v-show="!isShow">
           <i class="el-icon-message" style="margin-right:0.3rem" @click="redirect(5)">
             </i>消息中心<span class="icon" v-show="count > 0" ref="icon">{{ count }}</span>
-          </span>
+          </span> -->
         <span v-if="isShow">
           <span class="tab" @click="redirect(4)">登录</span>
           <span class="tab"  @click="toregister">注册</span>

@@ -30,8 +30,16 @@ exports.cssLoaders = function (options) {
     }
   }
 
+  const stylusLoader = {
+    loader: 'stylus-loader',
+    options: {
+      sourceMap: options.sourceMap
+    }
+  }
+
   // generate loader string to be used with extract text plugin
   function generateLoaders (loader, loaderOptions) {
+    // const loaders = options.usePostCSS ? [stylusLoader, cssLoader, postcssLoader] : [cssLoader]
     const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]
 
     if (loader) {
